@@ -30,7 +30,7 @@ Switch ($result)
 
         #Tests connection and then retrieves uptime
         $If1 = {If(Test-Connection -ComputerName $Machine -Quiet)
-                    {$Uptime = [Management.ManagementDateTimeCOnverter]::ToDateTime((Get-WmiObject Win32_OperaringSystem -ComputerName $Machine -Credential $Cred).LastBootUpTime) }
+                    {$Uptime = [Management.ManagementDateTimeConverter]::ToDateTime((Get-WmiObject Win32_OperatingSystem -ComputerName $Machine -Credential $Cred).LastBootUpTime) }
                }
         }
         1 {Exit}
