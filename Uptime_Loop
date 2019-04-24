@@ -1,0 +1,42 @@
+#The purpose of this script is to request a machines uptime and display in console 
+#Created by CJ
+#Updated Last: 4-24-2019
+
+#Get Credentials
+$Cred = Get-Credential
+
+#Start Loop
+Do
+{
+
+#Interactive UI and Query
+$Title = "Ping Machine and Get Uptime"
+
+$Message = "Do you wish to check uptime on a computer?"
+
+$Yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Pings Computer"
+
+$No = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Closes Window"
+
+$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
+
+$result = $host.ui.PromptForChoice($title, $message, $options, 0)
+
+#Switch based on user input
+Switch ($result)
+    { 0{
+        #Prompts User for Machine Name
+        $Machine = Read-Host 'Computer to ping for uptime'
+
+        #Tests connection and then retrieves uptime
+        $If1 = {If(Test-Connection -ComputerName $Machine -Quiet)
+                    {$Uptime = [Management.ManagementDateTimeCOnverter]::ToDateTime((Get-WmiObject Win32_OperaringSystem -ComputerName $Machine -Credenial $Cred).LastBootUpTime) }
+               }
+        }
+        1 {Exit}
+    }
+#Display Results in Console for user
+Write-Output $Uptime
+
+#As long as user hit yes console stays open and loops through uptime requests
+} While ($result -le 0) 
